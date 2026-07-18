@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Dashboard - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-speedometer2"></i> Dashboard Administrativo</h2>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people display-3"></i>
+                        <h1 class="display-5" th:text="${totalUsuarios}">0</h1>
+                        <p class="card-text">Usuarios Cadastrados</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-book display-3"></i>
+                        <h1 class="display-5" th:text="${totalLivros}">0</h1>
+                        <p class="card-text">Livros no Acervo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-info h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-arrow-right-circle display-3"></i>
+                        <h1 class="display-5" th:text="${emprestimosAtivos}">0</h1>
+                        <p class="card-text">Emprestimos Ativos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-currency-dollar display-3"></i>
+                        <h1 class="display-5" th:text="${multasPendentes}">0</h1>
+                        <p class="card-text">Multas Pendentes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-header bg-dark text-white">
+                        <i class="bi bi-bar-chart"></i> Indicadores Rapidos
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Usuarios Ativos</label>
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                     th:style="'width: ' + (${totalUsuarios} > 0 ? 100 : 0) + '%'"
+                                     th:text="${totalUsuarios}">0%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Emprestimos Ativos</label>
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar bg-info" role="progressbar"
+                                     th:style="'width: ' + (${emprestimosAtivos} > 0 ? 100 : 0) + '%'"
+                                     th:text="${emprestimosAtivos}">0%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Reservas Ativas</label>
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar bg-warning" role="progressbar"
+                                     th:style="'width: ' + (${reservasAtivas} > 0 ? 100 : 0) + '%'"
+                                     th:text="${reservasAtivas}">0%
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label text-muted small">Multas Pendentes</label>
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar bg-danger" role="progressbar"
+                                     th:style="'width: ' + (${multasPendentes} > 0 ? 100 : 0) + '%'"
+                                     th:text="${multasPendentes}">0%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-header bg-dark text-white">
+                        <i class="bi bi-gear"></i> Acoes Rapidas
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/usuarios}" class="btn btn-outline-primary">
+                                <i class="bi bi-people"></i> Gerenciar Usuarios
+                            </a>
+                            <a th:href="@{/livros/novo}" class="btn btn-outline-success">
+                                <i class="bi bi-plus-circle"></i> Adicionar Livro
+                            </a>
+                            <a th:href="@{/admin/config}" class="btn btn-outline-dark">
+                                <i class="bi bi-sliders"></i> Configuracoes do Sistema
+                            </a>
+                            <a th:href="@{/relatorios/emprestimos}" class="btn btn-outline-info">
+                                <i class="bi bi-bar-chart"></i> Relatorios
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

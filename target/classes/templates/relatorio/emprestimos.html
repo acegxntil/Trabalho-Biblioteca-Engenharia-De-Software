@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Relatorio de Emprestimos - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-bar-chart"></i> Relatorio de Emprestimos</h2>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-funnel"></i> Filtros
+            </div>
+            <div class="card-body">
+                <form th:action="@{/relatorios/emprestimos/gerar}" method="post" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Data Inicio</label>
+                        <input type="date" name="dataInicio" class="form-control" th:value="${dataInicio}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Data Fim</label>
+                        <input type="date" name="dataFim" class="form-control" th:value="${dataFim}">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i> Gerar Relatorio
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div th:if="${emprestimos}" class="card shadow">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-table"></i> Resultados
+                <span class="badge bg-light text-dark float-end" th:text="${#lists.size(emprestimos)} + ' registro(s)'"></span>
+            </div>
+            <div class="card-body">
+                <p th:if="${dataInicio and dataFim}">
+                    Periodo: <strong th:text="${#temporals.format(dataInicio, 'dd/MM/yyyy')}">inicio</strong>
+                    a <strong th:text="${#temporals.format(dataFim, 'dd/MM/yyyy')}">fim</strong>
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="table-success">
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Livro</th>
+                                <th>Data Emprestimo</th>
+                                <th>Data Prevista</th>
+                                <th>Data Devolucao</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="e : ${emprestimos}">
+                                <td th:text="${e.idEmprestimo}">1</td>
+                                <td th:text="${e.usuario.nome}">Usuario</td>
+                                <td th:text="${e.exemplar.livro.titulo}">Titulo</td>
+                                <td th:text="${#temporals.format(e.dataEmprestimo, 'dd/MM/yyyy')}">01/01/2024</td>
+                                <td th:text="${#temporals.format(e.dataPrevistaDevolucao, 'dd/MM/yyyy')}">15/01/2024</td>
+                                <td>
+                                    <span th:if="${e.dataRealDevolucao}" th:text="${#temporals.format(e.dataRealDevolucao, 'dd/MM/yyyy')}">15/01/2024</span>
+                                    <span th:unless="${e.dataRealDevolucao}" class="text-muted">-</span>
+                                </td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${e.status.name() == 'ATIVO' ? 'bg-primary' : 
+                                          e.status.name() == 'DEVOLVIDO' ? 'bg-success' : 'bg-danger'}"
+                                          th:text="${e.status}">ATIVO</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(emprestimos)}">
+                                <td colspan="7" class="text-center text-muted">Nenhum emprestimo encontrado no periodo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

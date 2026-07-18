@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Configuracoes - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2><i class="bi bi-sliders"></i> Configuracoes do Sistema</h2>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form th:action="@{/admin/config/salvar}" th:object="${config}" method="post">
+                            <input type="hidden" th:field="*{idConfig}">
+                            <div class="mb-3">
+                                <label class="form-label">Prazo Padrao de Emprestimo (dias)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                    <input type="number" th:field="*{prazoEmprestimoDias}" class="form-control" min="1" required>
+                                </div>
+                                <div class="form-text">Quantos dias o usuario tem para devolver o livro.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Valor da Multa por Dia de Atraso (R$)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                                    <input type="number" th:field="*{valorMultaDia}" class="form-control" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-text">Valor cobrado por cada dia de atraso na devolucao.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Prazo para Retirada de Reserva (dias)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                                    <input type="number" th:field="*{prazoRetiradaReservaDias}" class="form-control" min="1" required>
+                                </div>
+                                <div class="form-text">Prazo para o usuario retirar o livro apos ser notificado da disponibilidade.</div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary py-2">
+                                    <i class="bi bi-save"></i> Salvar Configuracoes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

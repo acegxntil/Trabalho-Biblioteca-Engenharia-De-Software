@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Historico de Emprestimos - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-clock-history"></i> Historico de Emprestimos</h2>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Livro</th>
+                                <th>Data Emprestimo</th>
+                                <th>Data Prevista</th>
+                                <th>Data Devolucao</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="e : ${emprestimos}">
+                                <td th:text="${e.idEmprestimo}">1</td>
+                                <td>
+                                    <span th:text="${e.exemplar.livro.titulo}">Titulo do Livro</span>
+                                    <br><small class="text-muted" th:text="'Tombo: ' + ${e.exemplar.numeroTombo}">Tombo</small>
+                                </td>
+                                <td th:text="${#temporals.format(e.dataEmprestimo, 'dd/MM/yyyy')}">01/01/2024</td>
+                                <td th:text="${#temporals.format(e.dataPrevistaDevolucao, 'dd/MM/yyyy')}">15/01/2024</td>
+                                <td>
+                                    <span th:if="${e.dataRealDevolucao}" th:text="${#temporals.format(e.dataRealDevolucao, 'dd/MM/yyyy')}">15/01/2024</span>
+                                    <span th:unless="${e.dataRealDevolucao}" class="text-muted">-</span>
+                                </td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${e.status.name() == 'ATIVO' ? 'bg-primary' : 
+                                          e.status.name() == 'DEVOLVIDO' ? 'bg-success' : 'bg-danger'}"
+                                          th:text="${e.status}">ATIVO</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(emprestimos)}">
+                                <td colspan="6" class="text-center text-muted">Nenhum emprestimo encontrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

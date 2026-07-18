@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Usuarios - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-people"></i> Gerenciar Usuarios</h2>
+            </div>
+            <div class="col text-end">
+                <a th:href="@{/usuarios/novo}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Novo Usuario
+                </a>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Matricula</th>
+                                <th>Perfil</th>
+                                <th>Status</th>
+                                <th>Acoes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="u : ${usuarios}">
+                                <td th:text="${u.idUsuario}">1</td>
+                                <td th:text="${u.nome}">Nome</td>
+                                <td th:text="${u.email}">email@test.com</td>
+                                <td th:text="${u.matricula}">123</td>
+                                <td>
+                                    <span class="badge rounded-pill bg-info text-dark" th:text="${u.tipoPerfil}">ESTUDANTE</span>
+                                </td>
+                                <td>
+                                    <span class="badge rounded-pill"
+                                          th:classappend="${u.status.name() == 'ATIVO' ? 'bg-success' : 'bg-danger'}"
+                                          th:text="${u.status}">ATIVO</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a th:href="@{/usuarios/toggle-status/{id}(id=${u.idUsuario})}" class="btn btn-sm"
+                                       th:classappend="${u.status.name() == 'ATIVO' ? 'btn-danger' : 'btn-success'}">
+                                        <i class="bi" th:classappend="${u.status.name() == 'ATIVO' ? 'bi-toggle-off' : 'bi-toggle-on'}"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(usuarios)}">
+                                <td colspan="7" class="text-center text-muted">Nenhum usuario cadastrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

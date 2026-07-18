@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pt-BR">
+<head th:replace="fragments :: head('Detalhes do Livro - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/livros}">Acervo</a></li>
+                        <li class="breadcrumb-item active" th:text="${livro.titulo}">Titulo</li>
+                    </ol>
+                </nav>
+
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0" th:text="${livro.titulo}">Titulo do Livro</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <p><strong>ISBN:</strong> <span th:text="${livro.isbn}">000</span></p>
+                                <p><strong>Autor(es):</strong>
+                                    <span th:each="autor, iter : ${livro.autores}">
+                                        <span th:text="${autor.nome}">Autor</span><span th:unless="${iter.last}">, </span>
+                                    </span>
+                                </p>
+                                <p><strong>Editora:</strong> <span th:text="${livro.editora}">Editora</span></p>
+                                <p><strong>Edicao:</strong> <span th:text="${livro.edicao}">1a</span></p>
+                                <p><strong>Ano:</strong> <span th:text="${livro.anoPublicacao}">2024</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Categoria:</strong> <span th:text="${livro.categoria}">Categoria</span></p>
+                                <p><strong>Localizacao:</strong> <span th:text="${livro.localizacaoPrateleira}">Prateleira</span></p>
+                                <p>
+                                    <strong>Disponibilidade:</strong>
+                                    <span th:if="${disponiveis > 0}" class="badge bg-success fs-6">
+                                        <span th:text="${disponiveis}">0</span> exemplar(es) disponivel(is)
+                                    </span>
+                                    <span th:unless="${disponiveis > 0}" class="badge bg-danger fs-6">Indisponivel</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div th:if="${livro.descricao}" class="mb-4">
+                            <h5>Descricao</h5>
+                            <p th:text="${livro.descricao}" class="text-muted">Descricao do livro</p>
+                        </div>
+
+                        <h5>Exemplares</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Tombo</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="ex : ${exemplares}">
+                                        <td th:text="${ex.numeroTombo}">001</td>
+                                        <td>
+                                            <span class="badge"
+                                                  th:classappend="${ex.status.name() == 'DISPONIVEL' ? 'bg-success' : 
+                                                  ex.status.name() == 'EMPRESTADO' ? 'bg-warning text-dark' : 
+                                                  ex.status.name() == 'RESERVADO' ? 'bg-info' : 'bg-secondary'}"
+                                                  th:text="${ex.status}">DISPONIVEL</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4"
+                             sec:authorize="hasAnyRole('ESTUDANTE','PROFESSOR')">
+                            <form th:action="@{/reservas/nova}" method="post" th:if="${disponiveis == 0}">
+                                <input type="hidden" name="livroId" th:value="${livro.idLivro}">
+                                <button type="submit" class="btn btn-warning"><i class="bi bi-bookmark"></i> Reservar</button>
+                            </form>
+                            <a th:href="@{/livros}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Voltar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

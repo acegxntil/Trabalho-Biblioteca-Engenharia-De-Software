@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Editar Usuario - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2><i class="bi bi-pencil"></i> Editar Usuario</h2>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form th:action="@{/usuarios/atualizar}" th:object="${usuario}" method="post">
+                            <input type="hidden" th:field="*{idUsuario}">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nome</label>
+                                    <input type="text" th:field="*{nome}" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" th:field="*{email}" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nova Senha (deixe em branco para manter)</label>
+                                    <input type="password" th:field="*{senha}" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">CPF</label>
+                                    <input type="text" th:field="*{cpf}" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Matricula</label>
+                                    <input type="text" th:field="*{matricula}" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Perfil</label>
+                                    <select th:field="*{tipoPerfil}" class="form-select" required>
+                                        <option th:each="p : ${perfis}" th:value="${p}" th:text="${p}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Atualizar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

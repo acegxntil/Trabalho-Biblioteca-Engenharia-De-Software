@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Registrar Devolucao - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2><i class="bi bi-arrow-left-circle"></i> Registrar Devolucao</h2>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form th:action="@{/emprestimos/devolver}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">ID do Emprestimo</label>
+                                <input type="number" name="emprestimoId" class="form-control form-control-lg"
+                                       placeholder="Digite o ID do emprestimo" required>
+                                <div class="form-text">Informe o codigo do emprestimo a ser devolvido.</div>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 py-2">
+                                <i class="bi bi-check-circle"></i> Confirmar Devolucao
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="bi bi-info-circle"></i> Instrucoes
+                    </div>
+                    <div class="card-body">
+                        <ol class="mb-0">
+                            <li>Localize o ID do emprestimo na ficha de retirada do usuario.</li>
+                            <li>Digite o ID no campo acima e clique em "Confirmar Devolucao".</li>
+                            <li>O sistema verificara automaticamente se ha multa por atraso.</li>
+                            <li>Se houver multa, ela sera registrada automaticamente.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

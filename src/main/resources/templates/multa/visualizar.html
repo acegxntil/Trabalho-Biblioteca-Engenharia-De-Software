@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Multas - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-currency-dollar"></i> Minhas Multas</h2>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-body text-center">
+                        <h1 class="display-4" th:text="${#aggregates.sum(multas.![valorTotal])}">0.00</h1>
+                        <p class="card-text">Valor Total em Multas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Livro</th>
+                                <th>Data Geracao</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Data Quitacao</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="m : ${multas}">
+                                <td th:text="${m.idMulta}">1</td>
+                                <td>
+                                    <span th:text="${m.emprestimo.exemplar.livro.titulo}">Titulo</span>
+                                </td>
+                                <td th:text="${#temporals.format(m.dataGeracao, 'dd/MM/yyyy')}">01/01/2024</td>
+                                <td class="fw-bold" th:text="'R$ ' + ${#numbers.formatDecimal(m.valorTotal, 1, 2)}">R$ 10,00</td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${m.status.name() == 'PENDENTE' ? 'bg-danger' : 'bg-success'}"
+                                          th:text="${m.status}">PENDENTE</span>
+                                </td>
+                                <td>
+                                    <span th:if="${m.dataQuitacao}" th:text="${#temporals.format(m.dataQuitacao, 'dd/MM/yyyy')}">01/01/2024</span>
+                                    <span th:unless="${m.dataQuitacao}" class="text-muted">-</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(multas)}">
+                                <td colspan="6" class="text-center text-muted">Nenhuma multa registrada</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

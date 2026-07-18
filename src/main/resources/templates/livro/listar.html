@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Acervo - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-collection"></i> Acervo da Biblioteca</h2>
+            </div>
+            <div class="col text-end" sec:authorize="hasAnyRole('BIBLIOTECARIO','ADMIN')">
+                <a th:href="@{/livros/novo}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Novo Livro
+                </a>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto">
+                <form th:action="@{/livros/buscar}" method="get" class="input-group">
+                    <input type="text" name="termo" class="form-control form-control-lg"
+                           placeholder="Buscar por titulo, autor ou ISBN..." th:value="${termo}">
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-search"></i> Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row" th:if="${not #lists.isEmpty(livros)}">
+            <div class="col-md-6 col-lg-4 mb-4" th:each="livro : ${livros}">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${livro.titulo}">Titulo</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <span th:each="autor, iter : ${livro.autores}">
+                                <span th:text="${autor.nome}">Autor</span><span th:unless="${iter.last}">, </span>
+                            </span>
+                        </h6>
+                        <p class="card-text small">
+                            <span th:if="${livro.isbn}" class="d-block"><strong>ISBN:</strong> <span th:text="${livro.isbn}"></span></span>
+                            <span th:if="${livro.editora}" class="d-block"><strong>Editora:</strong> <span th:text="${livro.editora}"></span></span>
+                            <span class="d-block"><strong>Localizacao:</strong> <span th:text="${livro.localizacaoPrateleira}">Prateleira</span></span>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                        <a th:href="@{/livros/{id}(id=${livro.idLivro})}" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye"></i> Detalhes
+                        </a>
+                        <div>
+                            <span th:if="${disponiveisMap[livro.idLivro] > 0}" class="badge bg-success me-1">
+                                <span th:text="${disponiveisMap[livro.idLivro]}"></span> disponivel(is)
+                            </span>
+                            <span th:if="${disponiveisMap[livro.idLivro] == 0}" class="badge bg-danger me-1">Indisponivel</span>
+                            <span class="badge bg-secondary"><span th:text="${#lists.size(livro.exemplares)}">0</span> total</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(livros)}" class="text-center py-5">
+            <i class="bi bi-search display-1 text-muted"></i>
+            <p class="lead text-muted mt-3" th:if="${termo}">Nenhum resultado encontrado para "<span th:text="${termo}">termo</span>"</p>
+            <p class="lead text-muted mt-3" th:unless="${termo}">Nenhum livro cadastrado no acervo</p>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

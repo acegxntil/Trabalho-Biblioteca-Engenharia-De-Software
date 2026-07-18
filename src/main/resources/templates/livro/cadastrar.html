@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Novo Livro - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2><i class="bi bi-book"></i> Cadastrar Livro</h2>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <form th:action="@{/livros/salvar}" th:object="${livro}" method="post">
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <label class="form-label">Titulo</label>
+                                    <input type="text" th:field="*{titulo}" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">ISBN</label>
+                                    <input type="text" th:field="*{isbn}" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Editora</label>
+                                    <input type="text" th:field="*{editora}" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Ano</label>
+                                    <input type="number" th:field="*{anoPublicacao}" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Edicao</label>
+                                    <input type="text" th:field="*{edicao}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Categoria</label>
+                                    <input type="text" th:field="*{categoria}" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Localizacao na Prateleira</label>
+                                    <input type="text" th:field="*{localizacaoPrateleira}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descricao</label>
+                                <textarea th:field="*{descricao}" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{/livros}" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

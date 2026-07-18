@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Registrar Emprestimo - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2><i class="bi bi-arrow-right-circle"></i> Registrar Emprestimo</h2>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Etapa 1: Buscar Usuario</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/usuarios/buscar}" method="get" class="input-group">
+                            <input type="text" name="termo" class="form-control" placeholder="Buscar por nome ou matricula...">
+                            <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Buscar</button>
+                        </form>
+                        <div th:if="${usuarios}" class="mt-3">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Matricula</th>
+                                            <th>Status</th>
+                                            <th>Acao</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="u : ${usuarios}">
+                                            <td th:text="${u.nome}">Nome</td>
+                                            <td th:text="${u.matricula}">123</td>
+                                            <td>
+                                                <span class="badge" th:classappend="${u.status.name() == 'ATIVO' ? 'bg-success' : 'bg-danger'}"
+                                                      th:text="${u.status}">ATIVO</span>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/emprestimos/registrar}" method="get" class="d-inline">
+                                                    <input type="hidden" name="usuarioId" th:value="${u.idUsuario}">
+                                                    <button type="submit" class="btn btn-sm btn-success">Selecionar</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow mb-4" th:if="${usuarioSelecionado}">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Etapa 2: Selecionar Exemplar</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Usuario:</strong> <span th:text="${usuarioSelecionado.nome}"></span></p>
+                        <form th:action="@{/livros/buscar}" method="get" class="input-group">
+                            <input type="text" name="termo" class="form-control" placeholder="Buscar livro por titulo, autor ou ISBN...">
+                            <button type="submit" class="btn btn-info text-white"><i class="bi bi-search"></i> Buscar</button>
+                        </form>
+                        <div th:if="${livros}" class="mt-3">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Titulo</th>
+                                            <th>ISBN</th>
+                                            <th>Disponiveis</th>
+                                            <th>Acao</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="livro : ${livros}">
+                                            <td th:text="${livro.titulo}">Titulo</td>
+                                            <td th:text="${livro.isbn}">ISBN</td>
+                                            <td>
+                                                <span class="badge bg-success">
+                                                    <span th:text="${#lists.size(livro.exemplares)}">0</span> disp.
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/emprestimos/registrar}" method="post" class="d-inline">
+                                                    <input type="hidden" name="usuarioId" th:value="${usuarioSelecionado.idUsuario}">
+                                                    <input type="hidden" name="exemplarId" th:value="${livro.exemplares[0].idExemplar}">
+                                                    <button type="submit" class="btn btn-sm btn-primary"
+                                                            th:unless="${#lists.size(livro.exemplares) == 0}">
+                                                        <i class="bi bi-check"></i> Confirmar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

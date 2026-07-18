@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pt-BR">
+<head th:replace="fragments :: head('Inicio - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-house-door"></i> Bem-vindo, <span sec:authentication="name">Usuario</span></h2>
+                <p class="text-muted">Painel do <span sec:authentication="principal.authorities">perfil</span></p>
+            </div>
+        </div>
+
+        <div sec:authorize="hasAnyRole('ESTUDANTE','PROFESSOR')">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header bg-primary text-white">
+                            <i class="bi bi-journal"></i> Acervo da Biblioteca
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Busque livros no catalogo, veja detalhes e disponibilidade.</p>
+                            <a th:href="@{/livros}" class="btn btn-primary">
+                                <i class="bi bi-search"></i> Consultar Acervo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-info h-100">
+                        <div class="card-header bg-info text-white">
+                            <i class="bi bi-clock-history"></i> Meu Historico
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Acompanhe seus emprestimos, reservas e multas.</p>
+                            <a th:href="@{/emprestimos/meu-historico}" class="btn btn-info text-white">
+                                <i class="bi bi-eye"></i> Ver Historico
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-warning h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="bi bi-bookmark"></i> Minhas Reservas
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Visualize e gerencie suas reservas de livros.</p>
+                            <a th:href="@{/reservas/minhas}" class="btn btn-warning">
+                                <i class="bi bi-eye"></i> Ver Reservas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-danger h-100">
+                        <div class="card-header bg-danger text-white">
+                            <i class="bi bi-currency-dollar"></i> Multas
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Consulte suas multas pendentes e regularize sua situacao.</p>
+                            <a th:href="@{/multas/minhas}" class="btn btn-danger">
+                                <i class="bi bi-eye"></i> Ver Multas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div sec:authorize="hasRole('BIBLIOTECARIO')">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-success h-100">
+                        <div class="card-header bg-success text-white">
+                            <i class="bi bi-arrow-right-circle"></i> Emprestimos
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Registre emprestimos e devolucoes de materiais.</p>
+                            <a th:href="@{/emprestimos/registrar}" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Novo Emprestimo
+                            </a>
+                            <a th:href="@{/emprestimos/devolucao}" class="btn btn-outline-success mt-2">
+                                <i class="bi bi-arrow-left-circle"></i> Devolucao
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-info h-100">
+                        <div class="card-header bg-info text-white">
+                            <i class="bi bi-bookmark-check"></i> Reservas
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Gerencie as reservas ativas do sistema.</p>
+                            <a th:href="@{/reservas/gerenciar}" class="btn btn-info text-white">
+                                <i class="bi bi-list"></i> Gerenciar Reservas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-warning h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="bi bi-bar-chart"></i> Relatorios
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Gere relatorios de emprestimos por periodo.</p>
+                            <a th:href="@{/relatorios/emprestimos}" class="btn btn-warning">
+                                <i class="bi bi-file-text"></i> Gerar Relatorio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header bg-primary text-white">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Indicadores e metricas do sistema.</p>
+                            <a th:href="@{/admin/dashboard}" class="btn btn-primary">
+                                <i class="bi bi-eye"></i> Ver Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-secondary h-100">
+                        <div class="card-header bg-secondary text-white">
+                            <i class="bi bi-people"></i> Usuarios
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Gerencie usuarios e perfis de acesso.</p>
+                            <a th:href="@{/usuarios}" class="btn btn-secondary">
+                                <i class="bi bi-list"></i> Gerenciar Usuarios
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-dark h-100">
+                        <div class="card-header bg-dark text-white">
+                            <i class="bi bi-sliders"></i> Configuracoes
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Parametros do sistema (prazos, multas).</p>
+                            <a th:href="@{/admin/config}" class="btn btn-dark">
+                                <i class="bi bi-gear"></i> Configurar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

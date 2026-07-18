@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="fragments :: head('Minhas Reservas - SGBU')"></head>
+<body>
+    <div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: alertas"></div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-bookmark"></i> Minhas Reservas</h2>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Livro</th>
+                                <th>Data Reserva</th>
+                                <th>Data Expiracao</th>
+                                <th>Posicao</th>
+                                <th>Status</th>
+                                <th>Acao</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="r : ${reservas}">
+                                <td th:text="${r.livro.titulo}">Titulo</td>
+                                <td th:text="${#temporals.format(r.dataReserva, 'dd/MM/yyyy')}">01/01/2024</td>
+                                <td th:text="${#temporals.format(r.dataExpiracao, 'dd/MM/yyyy')}">04/01/2024</td>
+                                <td>
+                                    <span class="badge bg-info text-dark" th:text="${r.posicaoFila}">1</span>
+                                </td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${r.status.name() == 'ATIVA' ? 'bg-success' : 
+                                          r.status.name() == 'CANCELADA' ? 'bg-danger' : 'bg-secondary'}"
+                                          th:text="${r.status}">ATIVA</span>
+                                </td>
+                                <td>
+                                    <form th:action="@{/reservas/cancelar/{id}(id=${r.idReserva})}" method="post"
+                                          th:if="${r.status.name() == 'ATIVA'}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('Cancelar reserva?')">
+                                            <i class="bi bi-x-circle"></i> Cancelar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(reservas)}">
+                                <td colspan="6" class="text-center text-muted">Nenhuma reserva encontrada</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>
