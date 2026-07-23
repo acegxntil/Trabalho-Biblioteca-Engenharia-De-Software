@@ -12,7 +12,7 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <form th:action="@{/admin/config/salvar}" th:object="${config}" method="post">
-                            <input type="hidden" th:field="*{idConfig}">
+                            <input type="hidden" th:field="*{id}">
                             <div class="mb-3">
                                 <label class="form-label">Prazo Padrao de Emprestimo (dias)</label>
                                 <div class="input-group">

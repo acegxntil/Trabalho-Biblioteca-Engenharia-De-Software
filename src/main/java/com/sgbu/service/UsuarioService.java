@@ -2,6 +2,7 @@ package com.sgbu.service;
 
 import com.sgbu.model.Usuario;
 import com.sgbu.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Usuario> listarTodos() {
@@ -32,10 +35,18 @@ public class UsuarioService {
     public Usuario salvar(Usuario usuario) {
         usuario.setDataCadastro(LocalDate.now());
         usuario.setStatus(Usuario.StatusUsuario.ATIVO);
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         return usuarioRepository.save(usuario);
     }
 
     public Usuario atualizar(Usuario usuario) {
+        if (usuario.getSenha() != null && !usuario.getSenha().isEmpty()) {
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        } else {
+            Usuario existente = usuarioRepository.findById(usuario.getId())
+                    .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+            usuario.setSenha(existente.getSenha());
+        }
         return usuarioRepository.save(usuario);
     }
 

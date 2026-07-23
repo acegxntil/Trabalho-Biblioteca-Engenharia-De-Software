@@ -36,7 +36,7 @@
                                     <span class="badge bg-info text-dark" th:text="${r.posicaoFila}">1</span>
                                 </td>
                                 <td>
-                                    <form th:action="@{/reservas/cancelar/{id}(id=${r.idReserva})}" method="post"
+                                    <form th:action="@{/reservas/cancelar/{id}(id=${r.id})}" method="post"
                                           class="d-inline">
                                         <button type="submit" class="btn btn-sm btn-outline-danger"
                                                 onclick="return confirm('Cancelar reserva de ' + '${r.usuario.nome}' + '?')">

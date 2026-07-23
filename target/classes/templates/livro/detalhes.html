@@ -78,8 +78,8 @@
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4"
                              sec:authorize="hasAnyRole('ESTUDANTE','PROFESSOR')">
-                            <form th:action="@{/reservas/nova}" method="post" th:if="${disponiveis == 0}">
-                                <input type="hidden" name="livroId" th:value="${livro.idLivro}">
+                            <form th:action="@{/reservas/nova}" method="post">
+                                <input type="hidden" name="livroId" th:value="${livro.id}">
                                 <button type="submit" class="btn btn-warning"><i class="bi bi-bookmark"></i> Reservar</button>
                             </form>
                             <a th:href="@{/livros}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Voltar</a>

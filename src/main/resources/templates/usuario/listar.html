@@ -34,7 +34,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="u : ${usuarios}">
-                                <td th:text="${u.idUsuario}">1</td>
+                                <td th:text="${u.id}">1</td>
                                 <td th:text="${u.nome}">Nome</td>
                                 <td th:text="${u.email}">email@test.com</td>
                                 <td th:text="${u.matricula}">123</td>
@@ -47,10 +47,10 @@
                                           th:text="${u.status}">ATIVO</span>
                                 </td>
                                 <td>
-                                    <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}" class="btn btn-sm btn-warning">
+                                    <a th:href="@{/usuarios/editar/{id}(id=${u.id})}" class="btn btn-sm btn-warning">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a th:href="@{/usuarios/toggle-status/{id}(id=${u.idUsuario})}" class="btn btn-sm"
+                                    <a th:href="@{/usuarios/toggle-status/{id}(id=${u.id})}" class="btn btn-sm"
                                        th:classappend="${u.status.name() == 'ATIVO' ? 'btn-danger' : 'btn-success'}">
                                         <i class="bi" th:classappend="${u.status.name() == 'ATIVO' ? 'bi-toggle-off' : 'bi-toggle-on'}"></i>
                                     </a>

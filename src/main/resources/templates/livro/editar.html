@@ -12,7 +12,7 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <form th:action="@{/livros/atualizar}" th:object="${livro}" method="post">
-                            <input type="hidden" th:field="*{idLivro}">
+                            <input type="hidden" th:field="*{id}">
                             <div class="row mb-3">
                                 <div class="col-md-8">
                                     <label class="form-label">Titulo</label>

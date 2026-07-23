@@ -20,6 +20,7 @@ com\sgbu\controller\EmprestimoController.class
 com\sgbu\model\Emprestimo.class
 com\sgbu\config\SecurityConfig.class
 com\sgbu\controller\SugestaoController.class
+com\sgbu\model\PasswordResetToken.class
 com\sgbu\repository\SugestaoAquisicaoRepository.class
 com\sgbu\service\NotificacaoService.class
 com\sgbu\service\ConfiguracaoService.class
@@ -34,6 +35,8 @@ com\sgbu\config\WebConfig.class
 com\sgbu\model\Autor.class
 com\sgbu\model\Usuario$StatusUsuario.class
 com\sgbu\repository\LivroRepository.class
+com\sgbu\repository\PasswordResetTokenRepository.class
+com\sgbu\service\PasswordResetService.class
 com\sgbu\model\Usuario.class
 com\sgbu\controller\UsuarioController.class
 com\sgbu\repository\ReservaRepository.class

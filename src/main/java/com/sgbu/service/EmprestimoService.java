@@ -3,12 +3,16 @@ package com.sgbu.service;
 import com.sgbu.model.Configuracao;
 import com.sgbu.model.Emprestimo;
 import com.sgbu.model.Exemplar;
+import com.sgbu.model.Livro;
 import com.sgbu.model.Multa;
+import com.sgbu.model.Reserva;
 import com.sgbu.model.Usuario;
 import com.sgbu.repository.EmprestimoRepository;
 import com.sgbu.repository.ExemplarRepository;
 import com.sgbu.repository.MultaRepository;
+import com.sgbu.repository.ReservaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,15 +26,18 @@ public class EmprestimoService {
     private final EmprestimoRepository emprestimoRepository;
     private final ExemplarRepository exemplarRepository;
     private final MultaRepository multaRepository;
+    private final ReservaRepository reservaRepository;
     private final ConfiguracaoService configuracaoService;
 
     public EmprestimoService(EmprestimoRepository emprestimoRepository,
                              ExemplarRepository exemplarRepository,
                              MultaRepository multaRepository,
+                             ReservaRepository reservaRepository,
                              ConfiguracaoService configuracaoService) {
         this.emprestimoRepository = emprestimoRepository;
         this.exemplarRepository = exemplarRepository;
         this.multaRepository = multaRepository;
+        this.reservaRepository = reservaRepository;
         this.configuracaoService = configuracaoService;
     }
 
@@ -55,6 +62,13 @@ public class EmprestimoService {
 
         exemplar.setStatus(Exemplar.Status.EMPRESTADO);
         exemplarRepository.save(exemplar);
+
+        Livro livro = exemplar.getLivro();
+        reservaRepository.findByLivroAndUsuarioAndStatus(livro, usuario, Reserva.Status.ATIVA)
+                .ifPresent(r -> {
+                    r.setStatus(Reserva.Status.ATENDIDA);
+                    reservaRepository.save(r);
+                });
 
         return emprestimoRepository.save(emprestimo);
     }
@@ -109,9 +123,18 @@ public class EmprestimoService {
         return emprestimoRepository.countByStatus(Emprestimo.Status.ATIVO);
     }
 
+    @Transactional(readOnly = true)
     public List<Emprestimo> buscarPorPeriodo(LocalDate inicio, LocalDate fim) {
-        return emprestimoRepository.findAll().stream()
-                .filter(e -> !e.getDataEmprestimo().isBefore(inicio) && !e.getDataEmprestimo().isAfter(fim))
-                .toList();
+        return emprestimoRepository.findByDataEmprestimoBetween(inicio, fim);
+    }
+
+    public List<Emprestimo> buscarHistoricoComFiltros(Long usuarioId, Emprestimo.Status status,
+                                                       LocalDate dataInicio, LocalDate dataFim) {
+        return emprestimoRepository.findHistoricoComFiltros(usuarioId, status, dataInicio, dataFim);
+    }
+
+    public List<Emprestimo> buscarRelatorioComFiltros(String titulo, String nomeUsuario,
+                                                       LocalDate dataInicio, LocalDate dataFim) {
+        return emprestimoRepository.findRelatorioComFiltros(titulo, nomeUsuario, dataInicio, dataFim);
     }
 }

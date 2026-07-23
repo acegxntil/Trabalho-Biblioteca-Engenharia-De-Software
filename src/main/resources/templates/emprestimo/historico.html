@@ -12,6 +12,37 @@
             </div>
         </div>
 
+        <div class="card shadow mb-4">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-funnel"></i> Filtros
+            </div>
+            <div class="card-body">
+                <form th:action="@{/emprestimos/meu-historico}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Data Inicio</label>
+                        <input type="date" name="dataInicioStr" class="form-control" th:value="${dataInicioStr}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Data Fim</label>
+                        <input type="date" name="dataFimStr" class="form-control" th:value="${dataFimStr}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">Todos</option>
+                            <option th:each="s : ${statusOptions}" th:value="${s.name()}" th:text="${s.name()}"
+                                    th:selected="${s.name() == statusFiltro}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive">
@@ -28,7 +59,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="e : ${emprestimos}">
-                                <td th:text="${e.idEmprestimo}">1</td>
+                                <td th:text="${e.id}">1</td>
                                 <td>
                                     <span th:text="${e.exemplar.livro.titulo}">Titulo do Livro</span>
                                     <br><small class="text-muted" th:text="'Tombo: ' + ${e.exemplar.numeroTombo}">Tombo</small>

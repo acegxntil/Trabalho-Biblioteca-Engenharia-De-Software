@@ -16,12 +16,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/css/**", "/js/**", "/h2-console/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/usuarios/**").hasRole("ADMIN")
+                .requestMatchers("/login", "/recuperar-senha", "/redefinir-senha", "/css/**", "/js/**", "/h2-console/**").permitAll()
+                .requestMatchers("/admin/**").hasAnyRole("ADMIN", "BIBLIOTECARIO")
+                .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "BIBLIOTECARIO")
                 .requestMatchers("/emprestimos/registrar", "/emprestimos/devolucao", "/emprestimos/devolver")
                     .hasRole("BIBLIOTECARIO")
-                .requestMatchers("/reservas/nova", "/reservas/minhas", "/multas/minhas",
+                .requestMatchers("/reservas/nova", "/reservas/minhas",
+                        "/multas/minhas",
                         "/sugestoes/nova", "/sugestoes/salvar", "/emprestimos/meu-historico",
                         "/emprestimos/historico/**")
                     .hasAnyRole("ESTUDANTE", "PROFESSOR")

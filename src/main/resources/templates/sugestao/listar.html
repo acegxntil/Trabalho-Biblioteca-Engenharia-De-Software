@@ -43,7 +43,7 @@
                                           th:text="${s.status}">PENDENTE</span>
                                 </td>
                                 <td>
-                                    <form th:action="@{/sugestoes/analisar/{id}(id=${s.idSugestao})}" method="post"
+                                    <form th:action="@{/sugestoes/analisar/{id}(id=${s.id})}" method="post"
                                           th:if="${s.status.name() == 'PENDENTE'}">
                                         <button type="submit" class="btn btn-sm btn-success"
                                                 onclick="return confirm('Marcar esta sugestao como analisada?')">

@@ -18,19 +18,36 @@
             </div>
             <div class="card-body">
                 <form th:action="@{/relatorios/emprestimos/gerar}" method="post" class="row g-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Data Inicio</label>
-                        <input type="date" name="dataInicio" class="form-control" th:value="${dataInicio}">
+                        <input type="date" name="dataInicioStr" class="form-control" th:value="${dataInicio}">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Data Fim</label>
-                        <input type="date" name="dataFim" class="form-control" th:value="${dataFim}">
+                        <input type="date" name="dataFimStr" class="form-control" th:value="${dataFim}">
                     </div>
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">
+                    <div class="col-md-3">
+                        <label class="form-label">Titulo do Livro</label>
+                        <input type="text" name="titulo" class="form-control" placeholder="Qualquer titulo" th:value="${titulo}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Nome do Usuario</label>
+                        <input type="text" name="nomeUsuario" class="form-control" placeholder="Qualquer usuario" th:value="${nomeUsuario}">
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-search"></i> Gerar Relatorio
                         </button>
+                        <button type="submit" class="btn btn-success" form="pdfForm">
+                            <i class="bi bi-filetype-pdf"></i> Baixar PDF
+                        </button>
                     </div>
+                </form>
+                <form th:action="@{/relatorios/emprestimos/pdf}" method="post" id="pdfForm">
+                    <input type="hidden" name="dataInicioStr" th:value="${dataInicio}">
+                    <input type="hidden" name="dataFimStr" th:value="${dataFim}">
+                    <input type="hidden" name="titulo" th:value="${titulo}">
+                    <input type="hidden" name="nomeUsuario" th:value="${nomeUsuario}">
                 </form>
             </div>
         </div>
@@ -41,7 +58,7 @@
                 <span class="badge bg-light text-dark float-end" th:text="${#lists.size(emprestimos)} + ' registro(s)'"></span>
             </div>
             <div class="card-body">
-                <p th:if="${dataInicio and dataFim}">
+                <p th:if="${dataInicio != null and dataFim != null}">
                     Periodo: <strong th:text="${#temporals.format(dataInicio, 'dd/MM/yyyy')}">inicio</strong>
                     a <strong th:text="${#temporals.format(dataFim, 'dd/MM/yyyy')}">fim</strong>
                 </p>
@@ -60,7 +77,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="e : ${emprestimos}">
-                                <td th:text="${e.idEmprestimo}">1</td>
+                                <td th:text="${e.id}">1</td>
                                 <td th:text="${e.usuario.nome}">Usuario</td>
                                 <td th:text="${e.exemplar.livro.titulo}">Titulo</td>
                                 <td th:text="${#temporals.format(e.dataEmprestimo, 'dd/MM/yyyy')}">01/01/2024</td>

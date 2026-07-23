@@ -2,6 +2,7 @@ package com.sgbu.controller;
 
 import com.sgbu.model.Usuario;
 import com.sgbu.service.UsuarioService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,14 +61,34 @@ public class UsuarioController {
     }
 
     @PostMapping("/atualizar")
-    public String atualizar(Usuario usuario, RedirectAttributes redirectAttributes) {
+    public String atualizar(Usuario usuario, Authentication authentication,
+                            RedirectAttributes redirectAttributes) {
+        String emailLogado = authentication.getName();
+        var logadoOpt = usuarioService.buscarPorEmail(emailLogado);
+        if (logadoOpt.isPresent() && logadoOpt.get().getTipoPerfil() == Usuario.TipoPerfil.BIBLIOTECARIO) {
+            var targetOpt = usuarioService.buscarPorId(usuario.getId());
+            if (targetOpt.isPresent() && targetOpt.get().getTipoPerfil() == Usuario.TipoPerfil.BIBLIOTECARIO) {
+                redirectAttributes.addFlashAttribute("erro", "Bibliotecario nao pode alterar outro bibliotecario");
+                return "redirect:/usuarios";
+            }
+        }
         usuarioService.atualizar(usuario);
         redirectAttributes.addFlashAttribute("sucesso", "Usuario atualizado com sucesso");
         return "redirect:/usuarios";
     }
 
     @GetMapping("/toggle-status/{id}")
-    public String toggleStatus(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String toggleStatus(@PathVariable Long id, Authentication authentication,
+                               RedirectAttributes redirectAttributes) {
+        String emailLogado = authentication.getName();
+        var logadoOpt = usuarioService.buscarPorEmail(emailLogado);
+        if (logadoOpt.isPresent() && logadoOpt.get().getTipoPerfil() == Usuario.TipoPerfil.BIBLIOTECARIO) {
+            var targetOpt = usuarioService.buscarPorId(id);
+            if (targetOpt.isPresent() && targetOpt.get().getTipoPerfil() == Usuario.TipoPerfil.BIBLIOTECARIO) {
+                redirectAttributes.addFlashAttribute("erro", "Bibliotecario nao pode alterar outro bibliotecario");
+                return "redirect:/usuarios";
+            }
+        }
         usuarioService.toggleStatus(id);
         redirectAttributes.addFlashAttribute("sucesso", "Status do usuario alterado com sucesso");
         return "redirect:/usuarios";

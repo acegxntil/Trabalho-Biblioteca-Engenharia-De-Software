@@ -4,6 +4,7 @@ import com.sgbu.model.Emprestimo;
 import com.sgbu.repository.EmprestimoRepository;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -57,6 +58,7 @@ public class NotificacaoService {
         }
     }
 
+    @Scheduled(cron = "0 0 8 * * ?")
     public void agendarNotificacoesVencimento() {
         List<Emprestimo> ativos = emprestimoRepository.findByStatus(Emprestimo.Status.ATIVO);
         LocalDate hoje = LocalDate.now();

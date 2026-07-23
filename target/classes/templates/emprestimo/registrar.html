@@ -15,8 +15,8 @@
                         <h5 class="mb-0">Etapa 1: Buscar Usuario</h5>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/usuarios/buscar}" method="get" class="input-group">
-                            <input type="text" name="termo" class="form-control" placeholder="Buscar por nome ou matricula...">
+                        <form th:action="@{/emprestimos/registrar}" method="get" class="input-group">
+                            <input type="text" name="termo" class="form-control" placeholder="Buscar por nome ou matricula..." th:value="${termo}">
                             <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Buscar</button>
                         </form>
                         <div th:if="${usuarios}" class="mt-3">
@@ -40,7 +40,7 @@
                                             </td>
                                             <td>
                                                 <form th:action="@{/emprestimos/registrar}" method="get" class="d-inline">
-                                                    <input type="hidden" name="usuarioId" th:value="${u.idUsuario}">
+                                                    <input type="hidden" name="usuarioId" th:value="${u.id}">
                                                     <button type="submit" class="btn btn-sm btn-success">Selecionar</button>
                                                 </form>
                                             </td>
@@ -58,8 +58,9 @@
                     </div>
                     <div class="card-body">
                         <p><strong>Usuario:</strong> <span th:text="${usuarioSelecionado.nome}"></span></p>
-                        <form th:action="@{/livros/buscar}" method="get" class="input-group">
-                            <input type="text" name="termo" class="form-control" placeholder="Buscar livro por titulo, autor ou ISBN...">
+                        <form th:action="@{/emprestimos/registrar}" method="get" class="input-group">
+                            <input type="hidden" name="usuarioId" th:value="${usuarioSelecionado.id}">
+                            <input type="text" name="termo" class="form-control" placeholder="Buscar livro por titulo, autor ou ISBN..." th:value="${termo}">
                             <button type="submit" class="btn btn-info text-white"><i class="bi bi-search"></i> Buscar</button>
                         </form>
                         <div th:if="${livros}" class="mt-3">
@@ -84,8 +85,8 @@
                                             </td>
                                             <td>
                                                 <form th:action="@{/emprestimos/registrar}" method="post" class="d-inline">
-                                                    <input type="hidden" name="usuarioId" th:value="${usuarioSelecionado.idUsuario}">
-                                                    <input type="hidden" name="exemplarId" th:value="${livro.exemplares[0].idExemplar}">
+                                                    <input type="hidden" name="usuarioId" th:value="${usuarioSelecionado.id}">
+                                                    <input type="hidden" name="exemplarId" th:value="${livro.exemplares[0].id}">
                                                     <button type="submit" class="btn btn-sm btn-primary"
                                                             th:unless="${#lists.size(livro.exemplares) == 0}">
                                                         <i class="bi bi-check"></i> Confirmar

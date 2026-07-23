@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,22 +39,25 @@ public class EmprestimoController {
 
     @GetMapping("/registrar")
     public String registrarForm(@RequestParam(required = false) Long usuarioId,
-                                @RequestParam(required = false) Long livroId,
+                                @RequestParam(required = false) String termo,
                                 Model model) {
-        model.addAttribute("etapa", usuarioId == null ? 1 : 2);
         if (usuarioId != null) {
             Optional<Usuario> usuarioOpt = usuarioService.buscarPorId(usuarioId);
             usuarioOpt.ifPresent(u -> {
                 model.addAttribute("usuarioSelecionado", u);
-                if (livroId != null) {
-                    Optional<Livro> livroOpt = livroService.buscarPorId(livroId);
-                    livroOpt.ifPresent(l -> {
-                        List<Exemplar> disponiveis = exemplarService.listarDisponiveisPorLivroId(livroId);
-                        model.addAttribute("exemplaresDisponiveis", disponiveis);
-                        model.addAttribute("livroSelecionado", l);
-                    });
-                }
             });
+        } else if (termo != null && !termo.isBlank()) {
+            List<Usuario> usuarios = usuarioService.buscarPorNomeOuMatricula(termo);
+            model.addAttribute("usuarios", usuarios);
+            model.addAttribute("termo", termo);
+            model.addAttribute("etapa", 1);
+            return "emprestimo/registrar";
+        }
+        model.addAttribute("etapa", usuarioId == null ? 1 : 2);
+        if (usuarioId != null && termo != null && !termo.isBlank()) {
+            List<Livro> livros = livroService.buscarPorTermo(termo);
+            model.addAttribute("livros", livros);
+            model.addAttribute("termo", termo);
         }
         return "emprestimo/registrar";
     }
@@ -111,13 +115,33 @@ public class EmprestimoController {
     }
 
     @GetMapping("/meu-historico")
-    public String meuHistorico(Model model, Authentication authentication) {
+    public String meuHistorico(@RequestParam(required = false) String status,
+                               @RequestParam(required = false) String dataInicioStr,
+                               @RequestParam(required = false) String dataFimStr,
+                               Model model, Authentication authentication) {
         String email = authentication.getName();
         var usuarioOpt = usuarioService.buscarPorEmail(email);
         if (usuarioOpt.isPresent()) {
-            List<Emprestimo> emprestimos = emprestimoService.buscarPorUsuario(usuarioOpt.get().getId());
+            Emprestimo.Status statusFilter = null;
+            LocalDate dataInicio = null;
+            LocalDate dataFim = null;
+            if (status != null && !status.isEmpty()) {
+                statusFilter = Emprestimo.Status.valueOf(status);
+            }
+            if (dataInicioStr != null && !dataInicioStr.isEmpty()) {
+                dataInicio = LocalDate.parse(dataInicioStr);
+            }
+            if (dataFimStr != null && !dataFimStr.isEmpty()) {
+                dataFim = LocalDate.parse(dataFimStr);
+            }
+            List<Emprestimo> emprestimos = emprestimoService.buscarHistoricoComFiltros(
+                    usuarioOpt.get().getId(), statusFilter, dataInicio, dataFim);
             model.addAttribute("emprestimos", emprestimos);
+            model.addAttribute("statusFiltro", status);
+            model.addAttribute("dataInicioStr", dataInicioStr);
+            model.addAttribute("dataFimStr", dataFimStr);
         }
+        model.addAttribute("statusOptions", Emprestimo.Status.values());
         return "emprestimo/historico";
     }
 }

@@ -18,6 +18,7 @@ D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\Emprestimo.jav
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\Exemplar.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\Livro.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\Multa.java
+D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\PasswordResetToken.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\Reserva.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\SugestaoAquisicao.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\model\Usuario.java
@@ -27,6 +28,7 @@ D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\Emprestim
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\ExemplarRepository.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\LivroRepository.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\MultaRepository.java
+D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\PasswordResetTokenRepository.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\ReservaRepository.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\SugestaoAquisicaoRepository.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\repository\UsuarioRepository.java
@@ -36,6 +38,7 @@ D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\ExemplarServ
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\LivroService.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\MultaService.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\NotificacaoService.java
+D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\PasswordResetService.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\RelatorioService.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\ReservaService.java
 D:\elisa\Documents\TrabalhoEsof\sgbu\src\main\java\com\sgbu\service\SugestaoService.java

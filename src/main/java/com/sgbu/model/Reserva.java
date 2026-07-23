@@ -19,6 +19,10 @@ public class Reserva {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_exemplar")
+    private Exemplar exemplar;
+
     @Column(nullable = false)
     private LocalDate dataReserva;
 
@@ -57,6 +61,14 @@ public class Reserva {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Exemplar getExemplar() {
+        return exemplar;
+    }
+
+    public void setExemplar(Exemplar exemplar) {
+        this.exemplar = exemplar;
     }
 
     public LocalDate getDataReserva() {

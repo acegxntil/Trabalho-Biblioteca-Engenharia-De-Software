@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pt-BR">
 <head th:replace="fragments :: head('Acervo - SGBU')"></head>
 <body>
     <div th:replace="fragments :: navbar"></div>
@@ -44,14 +46,21 @@
                         </p>
                     </div>
                     <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-                        <a th:href="@{/livros/{id}(id=${livro.idLivro})}" class="btn btn-sm btn-outline-primary">
+                        <a th:href="@{/livros/{id}(id=${livro.id})}" class="btn btn-sm btn-outline-primary">
                             <i class="bi bi-eye"></i> Detalhes
                         </a>
+                        <form th:action="@{/reservas/nova}" method="post" class="d-inline"
+                              sec:authorize="hasAnyRole('ESTUDANTE','PROFESSOR')">
+                            <input type="hidden" name="livroId" th:value="${livro.id}">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                <i class="bi bi-bookmark"></i> Reservar
+                            </button>
+                        </form>
                         <div>
-                            <span th:if="${disponiveisMap[livro.idLivro] > 0}" class="badge bg-success me-1">
-                                <span th:text="${disponiveisMap[livro.idLivro]}"></span> disponivel(is)
+                            <span th:if="${disponiveisMap[livro.id] > 0}" class="badge bg-success me-1">
+                                <span th:text="${disponiveisMap[livro.id]}"></span> disponivel(is)
                             </span>
-                            <span th:if="${disponiveisMap[livro.idLivro] == 0}" class="badge bg-danger me-1">Indisponivel</span>
+                            <span th:if="${disponiveisMap[livro.id] == 0}" class="badge bg-danger me-1">Indisponivel</span>
                             <span class="badge bg-secondary"><span th:text="${#lists.size(livro.exemplares)}">0</span> total</span>
                         </div>
                     </div>

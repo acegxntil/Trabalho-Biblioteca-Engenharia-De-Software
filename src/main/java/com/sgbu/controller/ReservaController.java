@@ -68,7 +68,8 @@ public class ReservaController {
         try {
             String email = authentication.getName();
             var usuarioOpt = usuarioService.buscarPorEmail(email);
-            if (usuarioOpt.isPresent() && usuarioOpt.get().getTipoPerfil() == Usuario.TipoPerfil.BIBLIOTECARIO) {
+            if (usuarioOpt.isPresent() && (usuarioOpt.get().getTipoPerfil() == Usuario.TipoPerfil.BIBLIOTECARIO
+                    || usuarioOpt.get().getTipoPerfil() == Usuario.TipoPerfil.ADMIN)) {
                 reservaService.cancelarReserva(id);
             } else if (usuarioOpt.isPresent()) {
                 reservaService.cancelarReserva(id, usuarioOpt.get().getId());
